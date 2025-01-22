@@ -13,6 +13,12 @@ public class CarController : MonoBehaviour
     public Transform frontLeftWheelTransform;
     public Transform backRightWheelTransform;
     public Transform backLeftWheelTransform;
+
+    float horizontalInput;
+    float verticalInput;
+
+    public float motorForce = 100f;
+    public float maxSteeringAngle = 30f;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,11 +30,23 @@ public class CarController : MonoBehaviour
     {
         MotorForce();
         UpdateWheel();
+        GetInput();
+        Steering();
+    }
+
+    void GetInput(){
+        horizontalInput = Input.GetAxis("Horizontal");
+        verticalInput = Input.GetAxis("Vertical");
     }
 
     void MotorForce(){
-        frontRightWheelCollider.motorTorque = 10f;
-        frontLeftWheelCollider.motorTorque = 10f;
+        frontRightWheelCollider.motorTorque = motorForce * verticalInput  ;
+        frontLeftWheelCollider.motorTorque = motorForce * verticalInput ;
+    }
+
+    void Steering(){
+        frontRightWheelCollider.steerAngle = maxSteeringAngle * horizontalInput;
+        frontLeftWheelCollider.steerAngle = maxSteeringAngle * horizontalInput;
     }
 
     void UpdateWheel(){
